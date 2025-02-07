@@ -116,7 +116,7 @@
     <extensions defaultExtensionNs="com.intellij">
 
         <applicationConfigurable parentId="tools"
-                                 displayName="CleanArchitecture"
+                                 displayName="Folder Structure Generator"
                                  instance="com.aminnez.plugin.clean.settings.SettingsConfigurable"/>
         <notificationGroup displayType="BALLOON" id="CleanArchitecture"/>
     </extensions>
