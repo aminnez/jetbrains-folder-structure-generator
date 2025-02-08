@@ -11,11 +11,14 @@ Folder Structure Generator is a powerful plugin designed to help developers quic
 - **User-Friendly Settings Panel**: Modify and manage folder structures with ease.
 - **Supports Multiple Architectures**: Adaptable to various architectural patterns.
 
+> For VS Code use [This One](https://marketplace.visualstudio.com/items?itemName=7eltantawy.templagen).
+
 ## Installation
 
 1. Download and install the plugin.
 2. Open your project and access the plugin settings in tools section.
 3. Define or select a folder structure template.
+
 
 ## Usage
 
