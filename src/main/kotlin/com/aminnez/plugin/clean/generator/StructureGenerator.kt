@@ -34,7 +34,8 @@ interface StructureGenerator {
         project: Project,
         folder: VirtualFile,
         structureMap: Map<String, Node>,
-        overwrite: Boolean
+        overwrite: Boolean,
+        rootName: String
     )
 }
 
@@ -46,13 +47,14 @@ class DefaultStructureGenerator : StructureGenerator {
         project: Project,
         folder: VirtualFile,
         structureMap: Map<String, Node>,
-        overwrite: Boolean
+        overwrite: Boolean,
+        rootName: String
     ) {
         structureMap.forEach { (name, node) ->
             try {
                 when (node.type) {
-                    "d" -> createDirectory(project, folder, name, node, overwrite)
-                    "f" -> createFile(folder, name, node.ext ?: "txt")
+                    "d" -> createDirectory(project, folder, name, node, overwrite,rootName)
+                    "f" -> createFile(folder, name, node.ext ?: "txt",rootName)
                     else -> throw IllegalArgumentException("Invalid node type: ${node.type}")
                 }
             } catch (e: Exception) {
@@ -76,16 +78,17 @@ class DefaultStructureGenerator : StructureGenerator {
         parentFolder: VirtualFile,
         name: String,
         node: Node,
-        overwrite: Boolean
+        overwrite: Boolean,
+        rootName: String
     ) {
         val existingFolder = parentFolder.findChild(name)
 
         if (existingFolder != null && node.children != null) {
-            generate(project, existingFolder, node.children, overwrite)
+            generate(project, existingFolder, node.children, overwrite, rootName)
         } else {
             val newFolder = parentFolder.createChildDirectory(parentFolder, name)
             node.children?.let {
-                generate(project, newFolder, it, overwrite)
+                generate(project, newFolder, it, overwrite,rootName)
             }
         }
     }
@@ -95,8 +98,13 @@ class DefaultStructureGenerator : StructureGenerator {
      * @param parentFolder the parent folder to create the file in
      * @param name the name of the file
      * @param extension the extension of the file
+     * @param rootName the feature name to replace $feature with
      */
-    private fun createFile(parentFolder: VirtualFile, name: String, extension: String) {
-        parentFolder.createChildData(parentFolder, "$name.$extension")
+    private fun createFile(parentFolder: VirtualFile, name: String, extension: String, rootName: String) {
+        var fileName = name
+        if (fileName.contains("\$feature")) {
+            fileName = fileName.replace("\$feature", rootName)
+        }
+        parentFolder.createChildData(parentFolder, "$fileName.$extension")
     }
 }

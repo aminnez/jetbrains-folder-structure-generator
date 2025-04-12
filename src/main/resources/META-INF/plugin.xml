@@ -12,9 +12,10 @@
 <p>Folder Structure Generator is a powerful plugin designed to help developers quickly set up and manage folder structures like Clean Architecture. It allows users to define custom structures using a simple JSON format within the settings panel, making it highly flexible and adaptable to different project architectures.</p>
 <h2>Features</h2>
 <ul>
-<li><strong>Predefined Templates</strong>: Generate a Clean Architecture structure out of the box.</li>
+<li><strong>Multiple Configuration Templates</strong>: Choose from different architecture templates like Clean Architecture, MVC, and more.</li>
 <li><strong>Customizable Structures</strong>: Define your own folder structures using JSON.</li>
 <li><strong>User-Friendly Settings Panel</strong>: Modify and manage folder structures with ease.</li>
+<li><strong>Dynamic File Naming</strong>: Use <code>$feature</code> in file names to automatically replace with your feature name.</li>
 <li><strong>Supports Multiple Architectures</strong>: Adaptable to various architectural patterns.</li>
 </ul>
 <h2>Installation</h2>
@@ -27,8 +28,23 @@
 <ol>
 <li>Right click on any folder in your project.</li>
 <li>Select <strong>Structured Folder</strong> from <strong>New</strong> in the context menu.</li>
-<li>Enter folder name (feature name).</li>
+<li>Choose your desired folder structure template from the submenu.</li>
+<li>Enter feature name (e.g., "home").</li>
 </ol>
+<h2>Dynamic File Naming</h2>
+<p>You can use the <code>$feature</code> variable in your file names, which will be replaced with the feature name you enter. For example:</p>
+<ul>
+<li>If you define a file named <code>$featurePage</code> and enter "home" as your feature name, the file will be created as <code>homePage.dart</code>.</li>
+<li>This makes it easy to create standardized file naming conventions across your project.</li>
+</ul>
+<h2>Multiple Configuration Templates</h2>
+<p>The plugin now supports multiple configuration templates that you can manage in the settings:</p>
+<ul>
+<li>Switch between different architecture styles (Clean Architecture, MVC, etc.)</li>
+<li>Add your own custom templates</li>
+<li>Edit existing templates to suit your needs</li>
+<li>Select the appropriate template directly from the context menu</li>
+</ul>
 <h2>Default Clean Architecture Template</h2>
 <p>The plugin comes with a predefined Clean Architecture structure. Below is an example JSON configuration:</p>
 <pre><code class="language-json">{
@@ -53,7 +69,7 @@
       &quot;pages&quot;: {
         &quot;type&quot;: &quot;d&quot;,
         &quot;children&quot;: {
-          &quot;page&quot;: { &quot;type&quot;: &quot;f&quot;, &quot;ext&quot;: &quot;dart&quot; }
+          &quot;$featurePage&quot;: { &quot;type&quot;: &quot;f&quot;, &quot;ext&quot;: &quot;dart&quot; }
         }
       },
       &quot;components&quot;: { &quot;type&quot;: &quot;d&quot; },
@@ -68,6 +84,7 @@
 <li><strong>Folders</strong>: Defined with <code>{ &quot;type&quot;: &quot;d&quot; }</code>.</li>
 <li><strong>Files</strong>: Defined with <code>{ &quot;type&quot;: &quot;f&quot;, &quot;ext&quot;: &quot;&lt;extension&gt;&quot; }</code>.</li>
 <li><strong>Nested Folders</strong>: Use the <code>children</code> property to define subdirectories.</li>
+<li><strong>Dynamic Names</strong>: Use <code>$feature</code> in file names for automatic replacement.</li>
 </ul>
 <p>Example:</p>
 <pre><code class="language-json">{
@@ -75,7 +92,7 @@
     &quot;type&quot;: &quot;d&quot;,
     &quot;children&quot;: {
       &quot;utils&quot;: { &quot;type&quot;: &quot;d&quot; },
-      &quot;main&quot;: { &quot;type&quot;: &quot;f&quot;, &quot;ext&quot;: &quot;dart&quot; }
+      &quot;$feature_main&quot;: { &quot;type&quot;: &quot;f&quot;, &quot;ext&quot;: &quot;dart&quot; }
     }
   }
 }
@@ -102,19 +119,27 @@
     <depends>com.intellij.modules.platform</depends>
 
     <actions>
-        <action class="com.aminnez.plugin.clean.action.ActionGenerate"
-                description="Generate a new Clean/Own Architecture structure"
-                id="com.aminnez.plugin.clean.action.ActionGenerate"
-                icon="com.intellij.icons.ExpUiIcons.Actions.NewFolder"
-                text="Structured Folder">
+        <group class="com.aminnez.plugin.clean.action.FolderStructureActionGroup"
+               description="Generate a new folder structure based on selected template"
+               id="com.aminnez.plugin.clean.action.FolderStructureActionGroup"
+               icon="com.intellij.icons.ExpUiIcons.Actions.NewFolder"
+               popup="true"
+               text="Structured Folder">
             <add-to-group anchor="after"
                           group-id="NewGroup" relative-to-action="NewDir"/>
-        </action>
+        </group>
 
+        <!-- Keep the old action ID for backward compatibility but hide it -->
+        <action class="com.aminnez.plugin.clean.action.ActionGenerate"
+                description="Generate a new Clean/Own Architecture structure (Legacy)"
+                id="com.aminnez.plugin.clean.action.ActionGenerate"
+                icon="com.intellij.icons.ExpUiIcons.Actions.NewFolder"
+                text="Structured Folder (Legacy)">
+            <!-- Not added to any group, so it won't appear in menus -->
+        </action>
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
-
         <applicationConfigurable parentId="tools"
                                  displayName="Folder Structure Generator"
                                  instance="com.aminnez.plugin.clean.settings.SettingsConfigurable"/>

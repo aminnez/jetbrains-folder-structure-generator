@@ -41,7 +41,7 @@ internal class SettingsConfigurable : Configurable {
      * @return the created component.
      */
     @Nullable
-    override fun createComponent(): JComponent {
+    override fun createComponent(): JComponent? {
         settingsPanel = SettingsPanel()
         return settingsPanel.panel
     }
@@ -54,16 +54,50 @@ internal class SettingsConfigurable : Configurable {
     override fun isModified(): Boolean {
         val state: SettingsState.State =
             Objects.requireNonNull(SettingsState.instance.state)
-        return settingsPanel.jsonText != state.jsonString
+        
+        // Check if the selected configuration has changed
+        if (settingsPanel.selectedConfiguration != state.selectedConfiguration) {
+            return true
+        }
+        
+        // Check if the configurations map has changed
+        val panelConfigs = settingsPanel.allConfigurations
+        if (panelConfigs.size != state.configurations.size) {
+            return true
+        }
+        
+        // Check if any configuration content has changed
+        for ((key, value) in panelConfigs) {
+            if (state.configurations[key] != value) {
+                return true
+            }
+        }
+        
+        // Check if any configuration has been removed
+        for (key in state.configurations.keys) {
+            if (!panelConfigs.containsKey(key)) {
+                return true
+            }
+        }
+        
+        return false
     }
 
     /**
      * Applies the changes of the configurable.
      */
     override fun apply() {
-        if (JsonUtils.isJsonValid(settingsPanel.jsonText)) {
+        val currentJson = settingsPanel.jsonText
+        if (JsonUtils.isJsonValid(currentJson)) {
             val settings = SettingsState.instance
-            settings.state.jsonString = settingsPanel.jsonText
+            val state = settings.state
+            
+            // Update the configurations map
+            state.configurations.clear()
+            state.configurations.putAll(settingsPanel.allConfigurations)
+            
+            // Update the selected configuration
+            state.selectedConfiguration = settingsPanel.selectedConfiguration
         }
     }
 
@@ -73,6 +107,8 @@ internal class SettingsConfigurable : Configurable {
     override fun reset() {
         val state: SettingsState.State =
             Objects.requireNonNull(SettingsState.instance.state)
+        
+        // Load the selected configuration's JSON
         settingsPanel.jsonText = state.jsonString
     }
 }

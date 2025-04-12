@@ -2,7 +2,6 @@
 
 package com.aminnez.plugin.clean.settings
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.Service
@@ -23,10 +22,11 @@ internal class SettingsState : PersistentStateComponent<SettingsState.State> {
      */
     internal class State {
         /**
-         * The JSON string representing the project structure
+         * Map of configuration name to JSON string representing the project structure
          */
         @NonNls
-        var jsonString: String = "{\n" +
+        var configurations: MutableMap<String, String> = mutableMapOf(
+            "Clean Architecture" to "{\n" +
                 "  \"domain\": {\n" +
                 "    \"type\": \"d\",\n" +
                 "    \"children\": {\n" +
@@ -66,7 +66,35 @@ internal class SettingsState : PersistentStateComponent<SettingsState.State> {
                 "      }\n" +
                 "    }\n" +
                 "  }\n" +
+                "}",
+            "MVC" to "{\n" +
+                "  \"model\": {\n" +
+                "    \"type\": \"d\"\n" +
+                "  },\n" +
+                "  \"view\": {\n" +
+                "    \"type\": \"d\"\n" +
+                "  },\n" +
+                "  \"controller\": {\n" +
+                "    \"type\": \"d\"\n" +
+                "  }\n" +
                 "}"
+        )
+
+        /**
+         * Currently selected configuration name
+         */
+        @NonNls
+        var selectedConfiguration: String = "Clean Architecture"
+
+        /**
+         * For backward compatibility with older versions
+         */
+        @get:NonNls
+        var jsonString: String
+            get() = configurations[selectedConfiguration] ?: ""
+            set(value) {
+                configurations[selectedConfiguration] = value
+            }
     }
 
     private var settingsState = State()

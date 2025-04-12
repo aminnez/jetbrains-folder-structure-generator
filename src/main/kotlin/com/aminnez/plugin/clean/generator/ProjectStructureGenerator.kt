@@ -29,7 +29,7 @@ class ProjectStructureGenerator {
          */
         fun generate(
             dataContext: DataContext,
-            rootName: String?,
+            rootName: String,
             childrenJsonString: String?
         ) {
             val project = getProjectFromDataContext(dataContext) ?: return
@@ -54,7 +54,8 @@ class ProjectStructureGenerator {
                             project,
                             updatedFolder ?: folder,
                             structureMap,
-                            updatedFolder != folder
+                            updatedFolder != folder,
+                            rootName
                         )
                     }
                 } catch (e: Exception) {
