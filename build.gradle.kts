@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.aminnez.plugin.clean"
-version = "1.2"
+version = "1.3"
 
 repositories {
     mavenCentral()
@@ -31,7 +31,7 @@ tasks {
     }
 
     patchPluginXml {
-        sinceBuild = provider { "221" }
+        sinceBuild = provider { "231" }
         untilBuild = provider { null }
     }
 
