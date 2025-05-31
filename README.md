@@ -19,9 +19,11 @@ Folder Structure Generator is a powerful plugin designed to help developers quic
 
 ## Installation
 
-1. Download and install the plugin.
-2. Open your project and access the plugin settings in tools section.
-3. Define or select a folder structure template.
+1. Open IntelliJ IDEA.
+2. Go to `File > Settings > Plugins` (or `IntelliJ IDEA > Preferences > Plugins` on macOS).
+3. Search for "Folder Structure Generator" in the Marketplace tab.
+4. Click "Install" and restart IntelliJ IDEA when prompted.
+5. Once installed, open your project and access the plugin settings in the "Tools" menu to configure your folder structure templates.
 
 
 ## Usage
@@ -109,11 +111,12 @@ Example:
 
 ## Changelog
 
-### Version 1.2 (April 2025)
-- **New Feature**: Added support for multiple configuration templates
-- **New Feature**: Added dynamic file naming with $feature variable
-- **Improvement**: Redesigned UI with configuration submenu
-- **Improvement**: Enhanced settings panel for managing multiple configurations
+### Version 1.2
+- **New Feature**: Added support for multiple configuration templates.
+- **New Feature**: Added dynamic file naming with the `$feature` variable.
+- **Improvement**: Redesigned UI with a configuration submenu.
+- **Improvement**: Enhanced settings panel for managing multiple configurations.
+
 
 ## Contributing
 
