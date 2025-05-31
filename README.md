@@ -117,12 +117,6 @@ Example:
 - **Improvement**: Redesigned UI with a configuration submenu.
 - **Improvement**: Enhanced settings panel for managing multiple configurations.
 
-### Version 1.0
-- **New Feature**: Initial release of the Folder Structure Generator plugin.
-- **New Feature**: Added support for defining custom folder structures using JSON.
-- **New Feature**: Introduced the ability to create nested folders and files with specified extensions.
-- **New Feature**: Included a user-friendly settings panel for basic configuration.
-- **New Feature**: Provided a default Clean Architecture template.
 
 ## Contributing
 
